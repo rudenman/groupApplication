@@ -4,6 +4,8 @@ jdk version: 21
 
 Собранный jar: [groupApplication-1.0-SNAPSHOT.jar](groupApplication-1.0-SNAPSHOT.jar)
 
+Время работы при тестовом файле: 2.9 sec.  
+Полученное число многоэлементных групп: 1910
 ---
 
 ## Задание
