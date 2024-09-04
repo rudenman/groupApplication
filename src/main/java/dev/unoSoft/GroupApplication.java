@@ -1,13 +1,10 @@
 package dev.unoSoft;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class GroupApplication {
 
-    private final String OUTPUT_FILE = "output.txt";
+    private final String OUTPUT_FILE_PATH = "output.txt";
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -17,23 +14,18 @@ public class GroupApplication {
 
         GroupApplication app = new GroupApplication();
         app.run(args[0]);
-
     }
 
     private void run(String filename) {
-        List<Map<String, Set<String>>> columns = new ArrayList<>();
-
-        FileProcessor fileProcessor = new FileProcessor(filename);
-        boolean generatingColumnsSuccess = fileProcessor.readColumnsFromFile(columns);
-        if (!generatingColumnsSuccess) {
+        FileDataToDirtyGroupProcessor fileDataToDirtyGroupProcessor = new FileDataToDirtyGroupProcessor(filename);
+        Set<Set<String>> groups = fileDataToDirtyGroupProcessor.readDirtyGroupsFromFile();
+        if (groups.isEmpty()) {
             return;
         }
 
         GroupService groupService = new GroupService();
-        List<Set<String>> groups = groupService.fillGroups(columns);
+        groups = groupService.mergeGroups(groups);
 
-        groupService.writeGroupsToFile(groups, OUTPUT_FILE);
+        groupService.outputGroupsToFile(groups, OUTPUT_FILE_PATH);
     }
-
-
 }
