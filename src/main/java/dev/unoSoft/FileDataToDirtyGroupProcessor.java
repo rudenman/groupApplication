@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FileDataToDirtyGroupProcessor {
+    private final String REG_EXP = "^;*((\"[^\"]*\")|[^;]*)(;+(\"[^\"]*\")|[^;]*)*;*$";
     private final String filename;
 
     public FileDataToDirtyGroupProcessor(String filename) {
@@ -23,11 +24,7 @@ public class FileDataToDirtyGroupProcessor {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-//                Регулярное выражение, которое разрешает ";" на конце
-//                if (!line.matches("^(\"[^\"]*\"(;|$))+$")) {
-//                    continue;
-//                }
-                if (!line.matches("^(\"[^\"]*\"(;\"[^\"]*\")*)$")) {
+                if (!line.matches(REG_EXP)) {
                     continue;
                 }
                 String[] lineParts = line.split(";");
