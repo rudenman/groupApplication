@@ -21,12 +21,13 @@ public class GroupService {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             int groupNumber = 1;
 
-            bw.write("Количество многоэлементных групп: " + groupList.size());
+            bw.write("The number of multi-element groups: " + groupList.size());
+            bw.newLine();
             bw.newLine();
 
             for (Set<String> group : groupList) {
                 if (group.size() > 1) {
-                    bw.write("Группа " + groupNumber);
+                    bw.write("Group: " + groupNumber);
                     bw.newLine();
 
                     for (String line : group) {
