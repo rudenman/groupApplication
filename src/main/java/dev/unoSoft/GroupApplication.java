@@ -18,14 +18,17 @@ public class GroupApplication {
 
     private void run(String filename) {
         FileDataToDirtyGroupProcessor fileDataToDirtyGroupProcessor = new FileDataToDirtyGroupProcessor(filename);
-        Set<Set<String>> groups = fileDataToDirtyGroupProcessor.readDirtyGroupsFromFile();
-        if (groups.isEmpty()) {
+
+        if (!fileDataToDirtyGroupProcessor.readDirtyGroupsFromFile()) {
             return;
         }
 
-        GroupService groupService = new GroupService();
-        groups = groupService.mergeGroups(groups);
+        Set<Set<String>> multipleGroups = fileDataToDirtyGroupProcessor.getMultipleGroupSet();
+        Set<String> singleGroups = fileDataToDirtyGroupProcessor.getSingleGroupSet();
 
-        groupService.outputGroupsToFile(groups, OUTPUT_FILE_PATH);
+        GroupService groupService = new GroupService();
+        multipleGroups = groupService.mergeGroups(multipleGroups);
+
+        groupService.outputGroupsToFile(multipleGroups, singleGroups, OUTPUT_FILE_PATH);
     }
 }

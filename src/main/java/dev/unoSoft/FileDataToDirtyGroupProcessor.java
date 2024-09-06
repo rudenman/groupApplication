@@ -13,12 +13,16 @@ import java.util.stream.Collectors;
 public class FileDataToDirtyGroupProcessor {
     private final String REG_EXP = "^;*((\"[^\"]*\")|[^;]*)(;+(\"[^\"]*\")|[^;]*)*;*$";
     private final String filename;
+    private Set<String> SingleGroupSet;
+    private Set<Set<String>> multipleGroupSet;
 
     public FileDataToDirtyGroupProcessor(String filename) {
         this.filename = filename;
+        SingleGroupSet = new HashSet<>();
+        multipleGroupSet = new HashSet<>();
     }
 
-    public Set<Set<String>> readDirtyGroupsFromFile() {
+    public boolean readDirtyGroupsFromFile() {
         Map<LinePart, String> linePartToDirtySingleGroupMap = new HashMap<>();
         Map<LinePart, Set<String>> linePartToDirtyMultipleGroupMap = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -44,13 +48,27 @@ public class FileDataToDirtyGroupProcessor {
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + filename);
+            return false;
         } catch (IOException e) {
             System.out.println("Error reading file: " + filename);
+            return false;
         }
-        return linePartToDirtyMultipleGroupMap.values().stream()
+        SingleGroupSet = linePartToDirtySingleGroupMap.entrySet().stream()
+                .filter(entry -> !linePartToDirtyMultipleGroupMap.containsKey(entry.getKey()))
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toSet());
+
+        multipleGroupSet = linePartToDirtyMultipleGroupMap.values().stream()
                 .filter(group -> group.size() > 1)
                 .collect(Collectors.toSet());
+        return true;
     }
 
+    public Set<String> getSingleGroupSet() {
+        return SingleGroupSet;
+    }
 
+    public Set<Set<String>> getMultipleGroupSet() {
+        return multipleGroupSet;
+    }
 }

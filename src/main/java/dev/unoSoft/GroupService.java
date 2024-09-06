@@ -13,8 +13,8 @@ import java.util.Set;
 
 public class GroupService {
 
-    public void outputGroupsToFile(Set<Set<String>> groups, String fileName) {
-        List<Set<String>> groupList = new ArrayList<>(groups);
+    public void outputGroupsToFile(Set<Set<String>> multipleGroups, Set<String> singleGroups, String fileName) {
+        List<Set<String>> groupList = new ArrayList<>(multipleGroups);
         groupList.sort((group1, group2) -> Integer.compare(group2.size(), group1.size()));
 
 
@@ -37,6 +37,17 @@ public class GroupService {
                     bw.newLine();
                     groupNumber++;
                 }
+            }
+
+            for (String singleGroup : singleGroups) {
+                bw.write("Группа " + groupNumber);
+                bw.newLine();
+
+                bw.write(singleGroup);
+                bw.newLine();
+
+                bw.newLine();
+                groupNumber++;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
