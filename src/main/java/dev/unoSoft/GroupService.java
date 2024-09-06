@@ -16,8 +16,13 @@ public class GroupService {
     public void outputGroupsToFile(Set<Set<String>> groups, String fileName) {
         List<Set<String>> groupList = new ArrayList<>(groups);
         groupList.sort((group1, group2) -> Integer.compare(group2.size(), group1.size()));
+
+
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             int groupNumber = 1;
+
+            bw.write("Количество многоэлементных групп: " + groupList.size());
+            bw.newLine();
 
             for (Set<String> group : groupList) {
                 if (group.size() > 1) {
