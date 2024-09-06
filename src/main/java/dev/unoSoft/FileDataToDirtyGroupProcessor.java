@@ -34,7 +34,7 @@ public class FileDataToDirtyGroupProcessor {
                     }
                     LinePart linePart = new LinePart(lineParts[i], i);
                     if (linePartToDirtySingleGroupMap.containsKey(linePart)) {
-                        Set<String> group = linePartToDirtyMultipleGroupMap.computeIfAbsent(new LinePart(lineParts[i], i), v -> new HashSet<>());
+                        Set<String> group = linePartToDirtyMultipleGroupMap.computeIfAbsent(linePart, v -> new HashSet<>());
                         group.add(line);
                         group.add(linePartToDirtySingleGroupMap.get(linePart));
                     } else {
