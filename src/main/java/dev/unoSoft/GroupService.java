@@ -14,19 +14,20 @@ import java.util.Set;
 public class GroupService {
 
     public void outputGroupsToFile(Set<Set<String>> multipleGroups, Set<String> singleGroups, String fileName) {
-        List<Set<String>> groupList = new ArrayList<>(multipleGroups);
-        groupList.sort((group1, group2) -> Integer.compare(group2.size(), group1.size()));
+        List<Set<String>> multipleGroupList = new ArrayList<>(multipleGroups);
+        multipleGroupList.sort((group1, group2) -> Integer.compare(group2.size(), group1.size()));
 
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             int groupNumber = 1;
 
-            bw.write("Количество многоэлементных групп: " + groupList.size());
+            bw.write("The number of multi-element groups: " + multipleGroupList.size());
+            bw.newLine();
             bw.newLine();
 
-            for (Set<String> group : groupList) {
+            for (Set<String> group : multipleGroupList) {
                 if (group.size() > 1) {
-                    bw.write("Группа " + groupNumber);
+                    bw.write("Group " + groupNumber);
                     bw.newLine();
 
                     for (String line : group) {
@@ -40,7 +41,7 @@ public class GroupService {
             }
 
             for (String singleGroup : singleGroups) {
-                bw.write("Группа " + groupNumber);
+                bw.write("Group " + groupNumber);
                 bw.newLine();
 
                 bw.write(singleGroup);
